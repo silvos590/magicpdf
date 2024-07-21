@@ -16,7 +16,7 @@ This is a simple GUI application to compress and merge PDF files using `tkinter`
 
 ## Installation
 
-1. Clone the repository or download the `pdf_utility_ui.py` script.
+1. Clone the repository or download the `MagicPDF.py` script.
 2. Install the required libraries using pip:
 
 ```bash

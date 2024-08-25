@@ -28,7 +28,7 @@ pip install PyPDF2 Pillow
 Run the script using Python:
 
 ```bash
-python pdf_utility_ui.py
+python MagicPDF.py
 ```
 
 ### PDF Compression

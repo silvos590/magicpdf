@@ -4,7 +4,7 @@ This is a simple GUI application to compress and merge PDF files using `tkinter`
 
 ## Features
 
-- **PDF Compression**: Compress PDF files by resizing images within the PDF.
+- **PDF Compression**: Compress PDF files by resizing images within the PDF and compressing the text.
 - **PDF Merging**: Merge multiple PDF files into a single PDF.
 
 ## Requirements

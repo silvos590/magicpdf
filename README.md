@@ -36,7 +36,7 @@ python pdf_utility_ui.py
 1. Select the "Compress PDF" option from the File menu.
 2. Browse and select the input PDF file.
 3. Specify the output PDF file name.
-4. Enter the compression level (1-10, where 10 is the highest compression).
+4. Enter the compression level (1-10, where 10 is the highest compression). -> Notice that the quality level applies to PDFs made by images.
 5. Click the "Compress PDF" button.
 
 ### PDF Merging

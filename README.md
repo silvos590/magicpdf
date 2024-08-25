@@ -46,17 +46,6 @@ python pdf_utility_ui.py
 3. Specify the output PDF file name.
 4. Click the "Merge PDFs" button.
 
-## Screenshots
-
-### Main Window
-![Main Window](screenshots/main_window.png)
-
-### PDF Compression
-![PDF Compression](screenshots/compress_window.png)
-
-### PDF Merging
-![PDF Merging](screenshots/merge_window.png)
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
@@ -70,10 +59,3 @@ Contributions are welcome! Please open an issue or submit a pull request.
 - [PyPDF2](https://pypi.org/project/PyPDF2/) - A library to manipulate PDF files.
 - [Pillow](https://pypi.org/project/Pillow/) - A library for image processing.
 - [tkinter](https://docs.python.org/3/library/tkinter.html) - The standard Python interface to the Tk GUI toolkit.
-
-### Additional Notes
-
-- You can create a `screenshots` directory and add images of your application's UI to enhance the README file. Update the paths in the `Screenshots` section accordingly.
-- Ensure that the license mentioned matches the actual license used in your project. The above example assumes an MIT License.
-
-Save the above content into a file named `README.md` in the same directory as your script.

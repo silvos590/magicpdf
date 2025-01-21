@@ -54,7 +54,7 @@ def browse_files():
 def compress():
     input_file = input_entry.get()
     output_file = output_entry.get()
-    quality_level = 100 if not quality_entry.get() else int(quality_entry.get()) 
+    quality_level = 100 if not compression_entry.get() else int(compression_entry.get()) 
     
     if not input_file or not output_file or not quality_level:
         messagebox.showwarning("Input Error", "Please fill in all fields")
@@ -111,7 +111,7 @@ tk.Label(compress_frame, text="Output PDF File:").grid(row=1, column=0, padx=10,
 output_entry = tk.Entry(compress_frame, width=50)
 output_entry.grid(row=1, column=1, padx=10, pady=5)
 
-tk.Label(compress_frame, text="Compression Level (1-10):").grid(row=2, column=0, padx=10, pady=5)
+tk.Label(compress_frame, text="Compression Level (1-100):").grid(row=2, column=0, padx=10, pady=5)
 compression_entry = tk.Entry(compress_frame, width=10)
 compression_entry.grid(row=2, column=1, padx=10, pady=5, sticky="w")
 

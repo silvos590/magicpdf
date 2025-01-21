@@ -1,13 +1,11 @@
-
-from pypdf import PdfWriter, PdfReader
-import io
 import tkinter as tk
 from tkinter import filedialog, messagebox, Menu
+from pypdf import PdfWriter, PdfReader
 
 def compress_pdf(input_file, output_file, quality_level):
     try:
         pdf_writer = PdfWriter(clone_from=input_file)
-        
+
         # apply quality
         for page in pdf_writer.pages:
             # This is for text PDF
@@ -27,7 +25,7 @@ def compress_pdf(input_file, output_file, quality_level):
 def merge_pdfs(input_files, output_file):
     try:
         pdf_writer = PdfWriter()
-        
+
         for input_file in input_files:
             pdf_reader = PdfReader(open(input_file, "rb"))
             for page_num in range(len(pdf_reader.pages)):
@@ -36,7 +34,7 @@ def merge_pdfs(input_files, output_file):
 
         with open(output_file, "wb") as f_out:
             pdf_writer.write(f_out)
-        
+
         messagebox.showinfo("Success", f"Merged PDF saved as {output_file}")
     except Exception as e:
         messagebox.showerror("Error", str(e))
@@ -54,22 +52,22 @@ def browse_files():
 def compress():
     input_file = input_entry.get()
     output_file = output_entry.get()
-    quality_level = 100 if not compression_entry.get() else int(compression_entry.get()) 
-    
+    quality_level = 100 if not compression_entry.get() else int(compression_entry.get())
+
     if not input_file or not output_file or not quality_level:
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
-    
+
     compress_pdf(input_file, output_file, quality_level)
 
 def merge():
     input_files = input_files_entry.get().split(";")
     output_file = output_merge_entry.get()
-    
+
     if not input_files or not output_file:
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
-    
+
     merge_pdfs(input_files, output_file)
 
 def show_compress_frame():

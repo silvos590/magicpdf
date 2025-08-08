@@ -6,6 +6,7 @@ This is a simple GUI application to compress and merge PDF files using `tkinter`
 
 - **PDF Compression**: Compress PDF files by resizing images within the PDF and compressing the text.
 - **PDF Merging**: Merge multiple PDF files into a single PDF.
+- **PDF Rotation**: Rotate a PDF by 90, 180, or 270 degrees.
 
 ## Requirements
 
@@ -45,6 +46,14 @@ python MagicPDF.py
 2. Browse and select the input PDF files. You can select multiple files by holding the Ctrl key (Cmd key on macOS) while selecting.
 3. Specify the output PDF file name.
 4. Click the "Merge PDFs" button.
+
+### PDF Rotation
+
+1. Select the "Rotate PDF" option from the File menu.
+2. Browse and select the input PDF file.
+3. Specify the output PDF file name.
+4. Enter the degrees level (90, 180, or 270 - default 90).
+5. Click the "Rotate PDF" button.
 
 ## License
 

@@ -1,6 +1,6 @@
 # Magic PDF
 
-This is a simple GUI application to compress and merge PDF files using `tkinter`, `PyPDF2`, and `Pillow` libraries.
+This is a simple GUI application to manipulate PDF files using `tkinter`, `PyPDF2`, and `Pillow` libraries.
 
 ## Features
 

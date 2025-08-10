@@ -1,3 +1,4 @@
+import os, sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, Menu
 from pypdf import PdfWriter, PdfReader
@@ -128,10 +129,18 @@ def forget_all_frames(parent, current):
         if  widget != current:
             widget.pack_forget()   # or widget.grid_forget(), widget.place_forget()
 
+def resource_path(relative_path):
+    """ Get absolute path to resource (works for dev and PyInstaller) """
+    try:
+        base_path = sys._MEIPASS  # when packaged
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 # Create the main window
 root = tk.Tk()
 root.title("Magic PDF")
-root.iconphoto(False, tk.PhotoImage(file="logo.png"))
+root.iconphoto(False, tk.PhotoImage(file=resource_path("assets/logo.png")))
 
 # Create a menu bar
 menu_bar = Menu(root)

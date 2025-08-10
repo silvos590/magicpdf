@@ -63,6 +63,14 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 Contributions are welcome! Please open an issue or submit a pull request.
 
+## Distribution
+
+Is it possible to use Pyinstaller to distribute MagicPDF as an .exe:
+
+```bash
+python -m PyInstaller --onefile --windowed  --icon=assets/logo.png  --add-data "assets;assets" MagicPDF.py
+```
+
 ## Acknowledgments
 
 - [PyPDF2](https://pypi.org/project/PyPDF2/) - A library to manipulate PDF files.

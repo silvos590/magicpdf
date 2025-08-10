@@ -1,7 +1,7 @@
-import os, sys
 import tkinter as tk
 from tkinter import filedialog, messagebox, Menu
 from pypdf import PdfWriter, PdfReader
+from utils import *
 
 def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
     """
@@ -70,16 +70,6 @@ def merge_pdfs(input_files, output_file):
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
-def browse_file(input_entry):
-    file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
-    input_entry.delete(0, tk.END)
-    input_entry.insert(0, file_path)
-
-def browse_files(input_files_entry):
-    files = filedialog.askopenfilenames(filetypes=[("PDF files", "*.pdf")])
-    input_files_entry.delete(0, tk.END)
-    input_files_entry.insert(0, ";".join(files))
-
 def rotate():
     input_rotate_file = input_rotate_entry.get()
     output_rotate_file = output_rotate_entry.get()
@@ -129,14 +119,6 @@ def forget_all_frames(parent, current):
         if  widget != current:
             widget.pack_forget()   # or widget.grid_forget(), widget.place_forget()
 
-def resource_path(relative_path):
-    """ Get absolute path to resource (works for dev and PyInstaller) """
-    try:
-        base_path = sys._MEIPASS  # when packaged
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
 # Create the main window
 root = tk.Tk()
 root.title("Magic PDF")
@@ -154,6 +136,10 @@ file_menu.add_command(label="Rotate PDF", command=show_rotate_frame)
 file_menu.add_command(label="Merge PDFs", command=show_merge_frame)
 file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
+# Add Credits
+menu_bar.add_command(label="Credits",
+                     command=lambda:
+                     messagebox.showinfo(title="Credits", message="Coded by Aldo Mollica: https://github.com/silvos590"))
 
 # Create frames
 compress_frame = tk.Frame(root)

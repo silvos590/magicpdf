@@ -2,6 +2,15 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, Menu
 from pypdf import PdfWriter, PdfReader
 from utils import *
+import os, sys
+
+def resource_path(relative_path):
+    """ Get absolute path to resource (works for dev and PyInstaller) """
+    try:
+        base_path = sys._MEIPASS  # when packaged
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
     """

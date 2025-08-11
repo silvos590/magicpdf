@@ -5,3 +5,6 @@ dist/
 
 # Build and Cache
 __pycache__
+
+# IDE
+.vscode/

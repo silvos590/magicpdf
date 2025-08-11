@@ -39,7 +39,8 @@ jobs:
 
       - name: Run tests with unittest
         run: |
-          python -m unittest tests/test_calcoli.py
+          cd tests
+          python -m unittest discover
 
       # - name: Run tests with pytest and coverage
       #   run: |

@@ -2,6 +2,8 @@
 
 This is a simple GUI application to manipulate PDF files using `tkinter`, `PyPDF2`, and `Pillow` libraries.
 
+![Python CI](https://github.com/silvos590/magicpdf/actions/workflows/python-ci.yml/badge.svg)
+
 ## Features
 
 - **PDF Compression**: Compress PDF files by resizing images within the PDF and compressing the text.

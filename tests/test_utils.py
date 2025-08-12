@@ -1,16 +1,15 @@
-import sys, os
-
+import sys
+import os
 # add parent to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import utils
 
 import unittest
-import sys
-import os
 from unittest import mock
 
 class TestUtils(unittest.TestCase):
+    ''' Test cases for utility functions '''
 
     # @mock.patch('sys._MEIPASS', new='/tmp/fake_meipass')
     # def test_resource_path_pyinstaller(self):

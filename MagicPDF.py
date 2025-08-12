@@ -43,7 +43,11 @@ def merge():
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
 
-    merge_pdfs(input_files, output_file)
+    try:
+        merge_pdfs(input_files, output_file)
+        messagebox.showinfo("Success", f"Merged PDF saved as {output_file}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 def show_compress_frame():
     compress_frame.pack(fill='both', expand=True)

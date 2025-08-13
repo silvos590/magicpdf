@@ -37,7 +37,11 @@ def compress():
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
 
-    compress_pdf(input_file, output_file, quality_level)
+    try:
+        compress_pdf(input_file, output_file, quality_level)
+        messagebox.showinfo("Success", f"Compressed PDF saved as {output_file}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 def merge():
     input_files = input_files_entry.get().split(";")

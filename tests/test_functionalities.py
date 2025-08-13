@@ -71,15 +71,18 @@ class TestFunctionalities(unittest.TestCase):
         self.assertEqual(reader.pages[0].get('/Rotate'), 0)
         self.assertEqual(reader.pages[1].get('/Rotate'), desired_rotation)
 
-    # def test_compress_pdf_invalid_file(self):
-    #     with self.assertRaises(Exception):
-    #         compress_pdf("nonexistent.pdf", self.compressed_pdf, quality_level=50)
+    def test_compress_pdf_invalid_file(self):
+        with self.assertRaises(Exception):
+            compress_pdf("nonexistent.pdf", self.compressed_pdf, quality_level=50)
 
-    # def test_compress_pdf(self):
-    #     compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=50)
-    #     self.assertTrue(os.path.exists(self.compressed_pdf))
-    #     # Check that compressed PDF is not empty
-    #     self.assertTrue(os.path.getsize(self.compressed_pdf) > 0)
+    def test_compress_pdf(self):
+        compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=10)
+        self.assertTrue(os.path.exists(self.compressed_pdf))
+        # Check that compressed PDF is not empty
+        print(f"Sample PDF size: {os.path.getsize(self.sample_pdf1)} bytes")
+
+        print(f"Compressed PDF size: {os.path.getsize(self.compressed_pdf)} bytes")
+        self.assertTrue(os.path.getsize(self.compressed_pdf) < os.path.getsize(self.sample_pdf1))
 
 if __name__ == "__main__":
     unittest.main()

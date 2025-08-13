@@ -26,24 +26,20 @@ def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
 
 def compress_pdf(input_file, output_file, quality_level):
     """ Compress input_file with quality_level into output_file"""
-    try:
-        pdf_writer = PdfWriter(clone_from=input_file)
 
-        # apply quality
-        for page in pdf_writer.pages:
-            # This is for text PDF
-            page.compress_content_streams()
-            # This is for image PDF
-            for img in page.images:
-                img.replace(img.image, quality=quality_level)
+    pdf_writer = PdfWriter(clone_from=input_file)
 
-        # Write the compressed PDF to the output file
-        with open(output_file, "wb") as f_out:
-            pdf_writer.write(f_out)
+    # apply quality
+    for page in pdf_writer.pages:
+        # This is for text PDF
+        page.compress_content_streams()
+        # This is for image PDF
+        for img in page.images:
+            img.replace(img.image, quality=quality_level)
 
-        messagebox.showinfo("Success", f"Compressed PDF saved as {output_file}")
-    except Exception as e:
-        messagebox.showerror("Error", str(e))
+    # Write the compressed PDF to the output file
+    with open(output_file, "wb") as f_out:
+        pdf_writer.write(f_out)
 
 def merge_pdfs(input_files, output_file):
     """ Merge input_files into output_file"""

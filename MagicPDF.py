@@ -37,6 +37,10 @@ def compress():
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
 
+    if quality_level < 1 or quality_level > 100:
+        messagebox.showwarning("Input Error", "Please enter a valid compression level (1-100)")
+        return
+
     try:
         compress_pdf(input_file, output_file, quality_level)
         messagebox.showinfo("Success", f"Compressed PDF saved as {output_file}")

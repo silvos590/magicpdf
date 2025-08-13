@@ -8,6 +8,7 @@ from pypdf import PdfWriter, PdfReader
 from functionalities import rotate_pdf, compress_pdf, merge_pdfs
 
 class TestFunctionalities(unittest.TestCase):
+    """ Test cases for functionalities.py """
 
     def setUp(self):
         """ Set up test environment """
@@ -19,6 +20,7 @@ class TestFunctionalities(unittest.TestCase):
         self.merged_pdf = os.path.join(path, "merged.pdf")
         self.rotated_pdf = os.path.join(path, "rotated.pdf")
         self.compressed_pdf = os.path.join(path, "compressed.pdf")
+        self.compressed_pdf_2 = os.path.join(path, "compressed_2.pdf")
 
         writer1 = PdfWriter(clone_from=self.test_pdf)
         with open(self.sample_pdf1, "wb") as f:
@@ -33,7 +35,12 @@ class TestFunctionalities(unittest.TestCase):
 
     def tearDown(self):
         # Remove generated files
-        for f in [self.sample_pdf1, self.sample_pdf2, self.merged_pdf, self.rotated_pdf, self.compressed_pdf]:
+        for f in [self.sample_pdf1,
+                  self.sample_pdf2,
+                  self.merged_pdf,
+                  self.rotated_pdf,
+                  self.compressed_pdf,
+                  self.compressed_pdf_2]:
             if os.path.exists(f):
                 os.remove(f)
 
@@ -60,7 +67,7 @@ class TestFunctionalities(unittest.TestCase):
         rotate_pdf(self.sample_pdf1, self.rotated_pdf, rotation=desired_rotation)
         reader = PdfReader(self.rotated_pdf)
         # Check if page rotation is applied (rotation attribute exists)
-        self.assertEqual(reader.pages[0].get('/Rotate'), desired_rotation)
+        self.assertEqual(reader.pages[0]['/Rotate'], desired_rotation)
 
     def test_rotate_pdf_specific_page(self):
         desired_rotation = 180
@@ -68,21 +75,36 @@ class TestFunctionalities(unittest.TestCase):
         rotate_pdf(self.merged_pdf, self.rotated_pdf, rotation=desired_rotation, page_numbers=[1])
         reader = PdfReader(self.rotated_pdf)
         # Only second page should be rotated
-        self.assertEqual(reader.pages[0].get('/Rotate'), 0)
-        self.assertEqual(reader.pages[1].get('/Rotate'), desired_rotation)
+        self.assertEqual(reader.pages[0]['/Rotate'], 0)
+        self.assertEqual(reader.pages[1]['/Rotate'], desired_rotation)
 
     def test_compress_pdf_invalid_file(self):
         with self.assertRaises(Exception):
             compress_pdf("nonexistent.pdf", self.compressed_pdf, quality_level=50)
 
+    def test_compress_pdf_invalid_quality(self):
+        with self.assertRaises(ValueError):
+            compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=0)
+        with self.assertRaises(ValueError):
+            compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=101)
+
     def test_compress_pdf(self):
         compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=10)
         self.assertTrue(os.path.exists(self.compressed_pdf))
-        # Check that compressed PDF is not empty
-        print(f"Sample PDF size: {os.path.getsize(self.sample_pdf1)} bytes")
 
+        print(f"Sample PDF size: {os.path.getsize(self.sample_pdf1)} bytes")
         print(f"Compressed PDF size: {os.path.getsize(self.compressed_pdf)} bytes")
+        # Check that compressed PDF is smaller than original
         self.assertTrue(os.path.getsize(self.compressed_pdf) < os.path.getsize(self.sample_pdf1))
+
+        # Less compression
+        compress_pdf(self.sample_pdf1, self.compressed_pdf_2, quality_level=50)
+        self.assertTrue(os.path.exists(self.compressed_pdf_2))
+
+        print(f"Sample PDF size: {os.path.getsize(self.sample_pdf1)} bytes")
+        print(f"Compressed PDF size: {os.path.getsize(self.compressed_pdf_2)} bytes")
+        # Check that compressed PDF is greater than the first compressed PDF
+        self.assertTrue(os.path.getsize(self.compressed_pdf_2) > os.path.getsize(self.compressed_pdf))
 
 if __name__ == "__main__":
     unittest.main()

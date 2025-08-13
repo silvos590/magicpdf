@@ -27,12 +27,17 @@ def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
 def compress_pdf(input_file, output_file, quality_level):
     """ Compress input_file with quality_level into output_file"""
 
+    if quality_level < 1 or quality_level > 100:
+        raise ValueError("Invalid quality level. Please choose a value between 1 and 100.")
+
     pdf_writer = PdfWriter(clone_from=input_file)
 
     # apply quality
     for page in pdf_writer.pages:
+        # Map quality level input [1-100] to [1-10]
+        text_quality = (quality_level // 10) + 1
         # This is for text PDF
-        page.compress_content_streams()
+        page.compress_content_streams(level=text_quality)
         # This is for image PDF
         for img in page.images:
             img.replace(img.image, quality=quality_level)

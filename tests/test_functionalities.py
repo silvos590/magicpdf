@@ -51,33 +51,35 @@ class TestFunctionalities(unittest.TestCase):
         reader.close()
         reader.stream.close()
 
-    # def test_rotate_pdf_all_pages(self):
-    #     rotate_pdf(self.sample_pdf1, self.rotated_pdf, rotation=90)
-    #     reader = PdfReader(self.rotated_pdf)
-    #     # Check if page rotation is applied (rotation attribute exists)
-    #     self.assertTrue(hasattr(reader.pages[0], "rotation") or hasattr(reader.pages[0], "Rotate"))
+    def test_rotate_pdf_invalid_file(self):
+        with self.assertRaises(Exception):
+            rotate_pdf("nonexistent.pdf", self.rotated_pdf)
 
-    # def test_rotate_pdf_specific_page(self):
-    #     merge_pdfs([self.sample_pdf1, self.sample_pdf2], self.merged_pdf)
-    #     rotate_pdf(self.merged_pdf, self.rotated_pdf, rotation=180, page_numbers=[1])
-    #     reader = PdfReader(self.rotated_pdf)
-    #     # Only second page should be rotated
-    #     self.assertTrue(hasattr(reader.pages[1], "rotation") or hasattr(reader.pages[1], "Rotate"))
+    def test_rotate_pdf_all_pages(self):
+        desired_rotation = 90
+        rotate_pdf(self.sample_pdf1, self.rotated_pdf, rotation=desired_rotation)
+        reader = PdfReader(self.rotated_pdf)
+        # Check if page rotation is applied (rotation attribute exists)
+        self.assertEqual(reader.pages[0].get('/Rotate'), desired_rotation)
+
+    def test_rotate_pdf_specific_page(self):
+        desired_rotation = 180
+        merge_pdfs([self.sample_pdf1, self.sample_pdf2], self.merged_pdf)
+        rotate_pdf(self.merged_pdf, self.rotated_pdf, rotation=desired_rotation, page_numbers=[1])
+        reader = PdfReader(self.rotated_pdf)
+        # Only second page should be rotated
+        self.assertEqual(reader.pages[0].get('/Rotate'), 0)
+        self.assertEqual(reader.pages[1].get('/Rotate'), desired_rotation)
+
+    # def test_compress_pdf_invalid_file(self):
+    #     with self.assertRaises(Exception):
+    #         compress_pdf("nonexistent.pdf", self.compressed_pdf, quality_level=50)
 
     # def test_compress_pdf(self):
     #     compress_pdf(self.sample_pdf1, self.compressed_pdf, quality_level=50)
     #     self.assertTrue(os.path.exists(self.compressed_pdf))
     #     # Check that compressed PDF is not empty
     #     self.assertTrue(os.path.getsize(self.compressed_pdf) > 0)
-
-
-    # def test_rotate_pdf_invalid_file(self):
-    #     with self.assertRaises(Exception):
-    #         rotate_pdf("nonexistent.pdf", self.rotated_pdf)
-
-    # def test_compress_pdf_invalid_file(self):
-    #     with self.assertRaises(Exception):
-    #         compress_pdf("nonexistent.pdf", self.compressed_pdf, quality_level=50)
 
 if __name__ == "__main__":
     unittest.main()

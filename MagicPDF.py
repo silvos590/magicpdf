@@ -22,7 +22,11 @@ def rotate():
         messagebox.showwarning("Input Error", "Please fill in all fields")
         return
 
-    rotate_pdf(input_rotate_file, output_rotate_file, rotation, page_numbers=None)
+    try:
+        rotate_pdf(input_rotate_file, output_rotate_file, rotation, page_numbers=None)
+        messagebox.showinfo("Success", f"Rotated PDF saved as {output_rotate_file}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
 
 def compress():
     input_file = input_entry.get()

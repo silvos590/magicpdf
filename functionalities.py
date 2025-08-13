@@ -11,25 +11,18 @@ def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
         rotation (int): Degrees to rotate (90, 180, 270).
         page_numbers (list): Page numbers to rotate (0-indexed). Rotate all if None.
     """
-    try:
-        reader = PdfReader(input_file)
-        writer = PdfWriter()
+    reader = PdfReader(input_file)
+    writer = PdfWriter()
 
-        for i, page in enumerate(reader.pages):
-            if page_numbers is None or i in page_numbers:
-                rotated_page = page.rotate(rotation)
-                writer.add_page(rotated_page)
-            else:
-                writer.add_page(page)
+    for i, page in enumerate(reader.pages):
+        if page_numbers is None or i in page_numbers:
+            rotated_page = page.rotate(rotation)
+            writer.add_page(rotated_page)
+        else:
+            writer.add_page(page)
 
-        with open(output_file, "wb") as f_out:
-            writer.write(f_out)
-
-        messagebox.showinfo("Success", f"Rotated PDF saved as {output_file}")
-    except Exception as e:
-        messagebox.showerror("Error", str(e))
-    finally:
-        writer.close()
+    with open(output_file, "wb") as f_out:
+        writer.write(f_out)
 
 def compress_pdf(input_file, output_file, quality_level):
     """ Compress input_file with quality_level into output_file"""

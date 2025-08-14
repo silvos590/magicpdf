@@ -1,3 +1,4 @@
+import os
 from tkinter import messagebox
 from pypdf import PdfWriter, PdfReader
 
@@ -11,6 +12,9 @@ def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
         rotation (int): Degrees to rotate (90, 180, 270).
         page_numbers (list): Page numbers to rotate (0-indexed). Rotate all if None.
     """
+    if not input_file or not output_file:
+        raise ValueError("Invalid input or output file")
+
     reader = PdfReader(input_file)
     writer = PdfWriter()
 
@@ -60,3 +64,29 @@ def merge_pdfs(input_files, output_file):
 
     with open(output_file, "wb") as f_out:
         pdf_writer.write(f_out)
+
+def split_pdf(input_file, output_folder, page_ranges=None):
+    """ Split input_file into multiple PDFs based on page_ranges"""
+    if not input_file or not output_folder:
+        raise ValueError("Invalid input file or output folder")
+
+    reader = PdfReader(input_file)
+
+    if page_ranges is None or not page_ranges:
+        # If no page ranges are specified, split by individual pages
+        page_ranges = [f"{i+1}-{i+1}" for i in range(len(reader.pages))]
+        # print(f"Splitting into individual pages: {page_ranges}")
+
+    for r in page_ranges:
+        writer = PdfWriter()
+        # if r is made by only one number, start and end are set to the same value
+        if '-' not in r:
+            r = f"{r}-{r}"
+
+        start, end = map(int, r.split('-'))
+        # print(f"Splitting pages {start} to {end} from {input_file} into {output_folder}")
+        for num in range(start, end + 1):
+            writer.add_page(reader.pages[num - 1])
+        output_file = os.path.join(output_folder, f"page_{start}_to_{end}.pdf")
+        with open(output_file, "wb") as f_out:
+            writer.write(f_out)

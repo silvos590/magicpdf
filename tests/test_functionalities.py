@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # from unittest.mock import patch
 from pypdf import PdfWriter, PdfReader
-from functionalities import rotate_pdf, compress_pdf, merge_pdfs
+from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf
 
 class TestFunctionalities(unittest.TestCase):
     """ Test cases for functionalities.py """
@@ -15,6 +15,7 @@ class TestFunctionalities(unittest.TestCase):
         # test PDF file
         path = "./"
         self.test_pdf = os.path.join(path, "test.pdf")
+        self.test_pdf_multipage = os.path.join(path, "test_multipage.pdf")
         self.sample_pdf1 = os.path.join(path, "sample1.pdf")
         self.sample_pdf2 = os.path.join(path, "sample2.pdf")
         self.merged_pdf = os.path.join(path, "merged.pdf")
@@ -44,6 +45,11 @@ class TestFunctionalities(unittest.TestCase):
             if os.path.exists(f):
                 os.remove(f)
 
+        # Remove split pages
+        for f in os.listdir("./"):
+            if f.startswith("page_") and f.endswith(".pdf"):
+                os.remove(os.path.join("./", f))
+
     def test_merge_empty_list(self):
         with self.assertRaises(Exception):
             merge_pdfs([], self.merged_pdf)
@@ -57,6 +63,42 @@ class TestFunctionalities(unittest.TestCase):
         self.assertEqual(len(reader.pages), 2)
         reader.close()
         reader.stream.close()
+
+    def test_split_empty_list(self):
+        with self.assertRaises(Exception):
+            split_pdf(self.test_pdf_multipage, "", page_ranges=[])
+
+    def test_split_pdf(self):
+        output_folder = "./"
+        split_pdf(self.test_pdf_multipage, output_folder)
+        # Get test_pdf_multipage number of pages
+        reader = PdfReader(self.test_pdf_multipage)
+        num_pages = len(reader.pages)
+        reader.close()
+        # Check if the split files are created
+        for i in range(1, num_pages + 1):
+            self.assertTrue(os.path.exists(os.path.join(output_folder, f"page_{i}_to_{i}.pdf")))
+
+    def test_split_pdf_with_ranges(self):
+        output_folder = "./"
+        split_pdf(self.test_pdf_multipage, output_folder, page_ranges=["1-3", "6-10"])
+        # Check if the split files are created
+        self.assertTrue(os.path.exists(os.path.join(output_folder, "page_1_to_3.pdf")))
+        self.assertTrue(os.path.exists(os.path.join(output_folder, "page_6_to_10.pdf")))
+
+    def test_split_pdf_with_invalid_ranges(self):
+        output_folder = "./"
+        with self.assertRaises(Exception):
+            split_pdf(self.test_pdf_multipage, output_folder, page_ranges=["invalid_range"])
+
+    def test_split_pdf_with_invalid_file(self):
+        output_folder = "./"
+        with self.assertRaises(Exception):
+            split_pdf("nonexistent.pdf", output_folder)
+
+    def test_split_pdf_with_empty_output_folder(self):
+        with self.assertRaises(Exception):
+            split_pdf(self.test_pdf_multipage, "", page_ranges=["1-3"])
 
     def test_rotate_pdf_invalid_file(self):
         with self.assertRaises(Exception):

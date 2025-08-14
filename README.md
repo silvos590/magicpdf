@@ -9,6 +9,7 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 - **PDF Compression**: Compress PDF files by resizing images within the PDF and compressing the text.
 - **PDF Merging**: Merge multiple PDF files into a single PDF.
 - **PDF Rotation**: Rotate a PDF by 90, 180, or 270 degrees.
+- **PDF split**: Split a multi page PDF in multiple PDFs providing page ranges (e.g. 1-2;3-4;8).
 
 ## Requirements
 
@@ -56,6 +57,12 @@ python MagicPDF.py
 3. Specify the output PDF file name.
 4. Enter the degrees level (90, 180, or 270 - default 90).
 5. Click the "Rotate PDF" button.
+
+### PDF Split
+2. Browse and select the input PDF file.
+3. Specify the output PDF folder.
+4. Enter the page range (e.g. 1-2;3-4;8).
+5. Click the "Split PDF" button.
 
 ## License
 

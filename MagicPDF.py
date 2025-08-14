@@ -3,7 +3,7 @@ import sys
 import tkinter as tk
 from tkinter import messagebox, Menu
 from utils import browse_file, browse_files
-from functionalities import rotate_pdf, compress_pdf, merge_pdfs
+from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf
 
 def resource_path(relative_path):
     """ Get absolute path to resource (works for dev and PyInstaller) """
@@ -61,6 +61,24 @@ def merge():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+def split():
+    input_file = input_split_entry.get()
+    output_folder = output_split_entry.get()
+    page_ranges = None
+
+    if page_ranges_entry.get():
+        page_ranges = page_ranges_entry.get().split(";")
+
+    if not input_file or not output_folder:
+        messagebox.showwarning("Input Error", "Please fill in all fields")
+        return
+
+    try:
+        split_pdf(input_file, output_folder, page_ranges=page_ranges)
+        messagebox.showinfo("Success", f"Split PDFs saved in {output_folder}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
 def show_compress_frame():
     compress_frame.pack(fill='both', expand=True)
     forget_all_frames(root, compress_frame)
@@ -72,6 +90,10 @@ def show_rotate_frame():
 def show_merge_frame():
     merge_frame.pack(fill='both', expand=True)
     forget_all_frames(root, merge_frame)
+
+def show_split_frame():
+    split_frame.pack(fill='both', expand=True)
+    forget_all_frames(root, split_frame)
 
 def forget_all_frames(parent, current):
     for widget in parent.winfo_children():
@@ -93,17 +115,21 @@ menu_bar.add_cascade(label="File", menu=file_menu)
 file_menu.add_command(label="Compress PDF", command=show_compress_frame)
 file_menu.add_command(label="Rotate PDF", command=show_rotate_frame)
 file_menu.add_command(label="Merge PDFs", command=show_merge_frame)
+file_menu.add_command(label="Split PDF", command=show_split_frame)
 file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
 # Add Credits
 menu_bar.add_command(label="Credits",
                      command=lambda:
-                     messagebox.showinfo(title="Credits", message="Coded by Aldo Mollica: https://github.com/silvos590"))
+                     messagebox.showinfo(
+                         title="Credits",
+                         message="Coded by Aldo Mollica: https://github.com/silvos590"))
 
 # Create frames
 compress_frame = tk.Frame(root)
 rotate_frame = tk.Frame(root)
 merge_frame = tk.Frame(root)
+split_frame = tk.Frame(root)
 
 # Compression Frame Components
 tk.Label(compress_frame, text="Input PDF File:").grid(row=0, column=0, padx=10, pady=5)
@@ -155,6 +181,24 @@ output_merge_entry.grid(row=1, column=1, padx=10, pady=5)
 
 merge_button = tk.Button(merge_frame, text="Merge PDFs", command=merge)
 merge_button.grid(row=2, columnspan=3, pady=10)
+
+# Split Frame Components
+tk.Label(split_frame, text="Input PDF File:").grid(row=0, column=0, padx=10, pady=5)
+input_split_entry = tk.Entry(split_frame, width=50)
+input_split_entry.grid(row=0, column=1, padx=10, pady=5)
+browse_split_button = tk.Button(split_frame, text="Browse", command=lambda: browse_file(input_split_entry))
+browse_split_button.grid(row=0, column=2, padx=10, pady=5)
+
+tk.Label(split_frame, text="Output Folder:").grid(row=1, column=0, padx=10, pady=5)
+output_split_entry = tk.Entry(split_frame, width=50)
+output_split_entry.grid(row=1, column=1, padx=10, pady=5)
+
+tk.Label(split_frame, text="Page Ranges (e.g. 1-2;3-4;8):").grid(row=2, column=0, padx=10, pady=5)
+page_ranges_entry = tk.Entry(split_frame, width=50)
+page_ranges_entry.grid(row=2, column=1, padx=10, pady=5)
+
+split_button = tk.Button(split_frame, text="Split PDF", command=split)
+split_button.grid(row=3, columnspan=3, pady=10)
 
 # Show compress frame by default
 show_compress_frame()

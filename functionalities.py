@@ -31,7 +31,7 @@ def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
 def compress_pdf(input_file, output_file, quality_level):
     """ Compress input_file with quality_level into output_file"""
 
-    if quality_level < 1 or quality_level > 100:
+    if quality_level is None or quality_level < 1 or quality_level > 100:
         raise ValueError("Invalid quality level. Please choose a value between 1 and 100.")
 
     pdf_writer = PdfWriter(clone_from=input_file)

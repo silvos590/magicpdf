@@ -17,12 +17,12 @@ def convert_to_page_ranges(value: str) -> list:
 
 def main():
     parser = argparse.ArgumentParser(description="PDF manipulation CLI tool")
-    parser.add_argument("action", help="Action to perform on the PDF(s)")
+    parser.add_argument("action", choices=["merge", "split", "rotate", "compress"], help="Action to perform on the PDF(s)")
     parser.add_argument("input", help="Input PDF file")
     parser.add_argument("output", help="Output PDF file")
-    parser.add_argument("--page_ranges", type=convert_to_page_ranges, help="Page ranges to split the PDF (e.g., '1-3;5;7-9')")
-    parser.add_argument("--rotation_angle", type=int, choices=[90, 180, 270], help="Angle to rotate the PDF (e.g., 90, 180, 270)")
-    parser.add_argument("--quality_level", type=check_range, help="Quality level (1-100)")
+    parser.add_argument("-p", "--page_ranges", type=convert_to_page_ranges, help="Page ranges to split the PDF (e.g., '1-3;5;7-9')")
+    parser.add_argument("-r", "--rotation_angle", type=int, choices=[90, 180, 270], help="Angle to rotate the PDF (e.g., 90, 180, 270)")
+    parser.add_argument("-q", "--quality_level", type=check_range, help="Quality level (1-100)")
 
     args = parser.parse_args()
 

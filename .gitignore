@@ -8,3 +8,8 @@ __pycache__
 
 # IDE
 .vscode/
+
+# setuptools
+*.egg-info/
+dist/
+build/

@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magicpdf"
+version = "0.1.1"
+description = "A simple CLI to manipulate PDF files"
+authors = [{ name = "Aldo Mollica" }]
+dependencies = ["pypdf", "Pillow"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cli*"]   # ignore assets/
+
+[project.scripts]
+magicpdf = "cli.cli:main"

@@ -20,7 +20,7 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 
 ## Installation
 
-1. Clone the repository or download the `MagicPDF.py` script.
+1. Clone the repository.
 2. Install the required libraries using pip:
 
 ```bash
@@ -74,11 +74,20 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## Distribution
 
+### UI executable
+
 Is it possible to use Pyinstaller to distribute MagicPDF as an .exe:
 
 ```bash
 python -m PyInstaller --onefile --windowed --icon=assets/logo.png --add-data "assets;assets" MagicPDF.py
 ```
+### CLI pip package
+
+On project root run:
+```bash
+pip install -e .
+```
+[TBC]
 
 ## Acknowledgments
 

@@ -48,7 +48,28 @@ jobs:
           cd tests
           python -m unittest discover
 
+      - name: Get latest tag
+        id: get_tag
+        if: matrix.python-version == '3.12' && github.event_name == 'push'
+        run: |
+          # Get latest tag or default to v0.0.0
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "latest=$LATEST_TAG" >> $GITHUB_OUTPUT
+
+      - name: Bump patch version
+        id: bump
+        run: |
+          VERSION=${{ steps.get_tag.outputs.latest }}
+          VERSION=${VERSION#v}    # remove "v"
+          MAJOR=$(echo $VERSION | cut -d. -f1)
+          MINOR=$(echo $VERSION | cut -d. -f2)
+          PATCH=$(echo $VERSION | cut -d. -f3)
+          PATCH=$((PATCH+1))
+          NEW_TAG="v$MAJOR.$MINOR.$PATCH"
+          echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
+
       - name: Create and push tag
+        if: matrix.python-version == '3.12' && github.event_name == 'push'
         run: |
           VERSION="v1.0.$(date +%s)"   # replace with your versioning scheme
           git tag -a "$VERSION" -m "Release $VERSION"

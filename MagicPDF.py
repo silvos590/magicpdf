@@ -2,6 +2,7 @@ import os
 import sys
 import tkinter as tk
 from tkinter import messagebox, Menu
+from gui_helpers import *
 from utils import browse_file, browse_files
 from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf
 
@@ -79,31 +80,6 @@ def split():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
-def show_compress_frame():
-    compress_frame.pack(fill='both', expand=True)
-    root.title("Magic PDF - Compress")
-    forget_all_frames(root, compress_frame)
-
-def show_rotate_frame():
-    rotate_frame.pack(fill='both', expand=True)
-    root.title("Magic PDF - Rotate")
-    forget_all_frames(root, rotate_frame)
-
-def show_merge_frame():
-    merge_frame.pack(fill='both', expand=True)
-    root.title("Magic PDF - Merge")
-    forget_all_frames(root, merge_frame)
-
-def show_split_frame():
-    split_frame.pack(fill='both', expand=True)
-    root.title("Magic PDF - Split")
-    forget_all_frames(root, split_frame)
-
-def forget_all_frames(parent, current):
-    for widget in parent.winfo_children():
-        if  widget != current:
-            widget.pack_forget()   # or widget.grid_forget(), widget.place_forget()
-
 # Create the main window
 root = tk.Tk()
 root.title("Magic PDF")
@@ -116,10 +92,14 @@ root.config(menu=menu_bar)
 # Add menu items
 file_menu = Menu(menu_bar, tearoff=0)
 menu_bar.add_cascade(label="File", menu=file_menu)
-file_menu.add_command(label="Compress PDF", command=show_compress_frame)
-file_menu.add_command(label="Rotate PDF", command=show_rotate_frame)
-file_menu.add_command(label="Merge PDFs", command=show_merge_frame)
-file_menu.add_command(label="Split PDF", command=show_split_frame)
+file_menu.add_command(label="Compress PDF",
+                      command=lambda: show_compress_frame(compress_frame, root))
+file_menu.add_command(label="Rotate PDF",
+                      command=lambda: show_rotate_frame(rotate_frame, root))
+file_menu.add_command(label="Merge PDFs",
+                      command=lambda: show_merge_frame(merge_frame, root))
+file_menu.add_command(label="Split PDF",
+                      command=lambda: show_split_frame(split_frame, root))
 file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
 # Add Credits
@@ -205,7 +185,7 @@ split_button = tk.Button(split_frame, text="Split PDF", command=split)
 split_button.grid(row=3, columnspan=3, pady=10)
 
 # Show compress frame by default
-show_compress_frame()
+show_compress_frame(compress_frame, root)
 
 # Run the Tkinter event loop
 root.mainloop()

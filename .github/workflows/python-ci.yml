@@ -1,10 +1,13 @@
-name: Python CI
+name: MAGIC PDF CI
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -17,6 +20,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Set up Git
+        uses: fregante/setup-git-user@v2.0.2
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -41,6 +47,12 @@ jobs:
         run: |
           cd tests
           python -m unittest discover
+
+      - name: Create and push tag
+        run: |
+          VERSION="v1.0.$(date +%s)"   # replace with your versioning scheme
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
 
       # - name: Run tests with pytest and coverage
       #   run: |

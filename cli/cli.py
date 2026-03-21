@@ -3,7 +3,7 @@ import sys
 import os
 # add parent to sys.path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from functionalities import merge_pdfs, split_pdf, rotate_pdf, compress_pdf
+from functionalities import merge_pdfs, split_pdf, rotate_pdf, compress_pdf, ocr_pdf
 
 def check_range(value: str) -> int:
     """Validate that input is an integer between 1 and 100."""
@@ -17,7 +17,7 @@ def convert_to_page_ranges(value: str) -> list:
 
 def main():
     parser = argparse.ArgumentParser(description="PDF manipulation CLI tool")
-    parser.add_argument("action", choices=["merge", "split", "rotate", "compress"], help="Action to perform on the PDF(s)")
+    parser.add_argument("action", choices=["merge", "split", "rotate", "compress", "ocr"], help="Action to perform on the PDF(s)")
     parser.add_argument("input", help="Input PDF file")
     parser.add_argument("output", help="Output PDF file")
     parser.add_argument("-p", "--page_ranges", type=convert_to_page_ranges, help="Page ranges to split the PDF (e.g., '1-3;5;7-9')")
@@ -35,6 +35,8 @@ def main():
             rotate_pdf(args.input, args.output, args.rotation_angle)
         elif args.action == "compress":
             compress_pdf(args.input, args.output, args.quality_level)
+        elif args.action == "ocr":
+            ocr_pdf(args.input, args.output, args.page_ranges)
         else:
             print("Invalid action. Please choose from: merge, split, rotate, compress.")
     except Exception as e:

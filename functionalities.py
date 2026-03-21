@@ -1,6 +1,8 @@
 import os
 from tkinter import messagebox
 from pypdf import PdfWriter, PdfReader
+import ocrmypdf
+from pathlib import Path
 
 def rotate_pdf(input_file, output_file, rotation=90, page_numbers=None):
     """
@@ -90,3 +92,30 @@ def split_pdf(input_file, output_folder, page_ranges=None):
         output_file = os.path.join(output_folder, f"page_{start}_to_{end}.pdf")
         with open(output_file, "wb") as f_out:
             writer.write(f_out)
+
+def ocr_pdf(input_file, output_file, page_ranges=None):
+    input_path = Path(input_file)
+    if not input_path.exists():
+        raise FileNotFoundError(f"Input file not found: {input_file}")
+
+    kwargs = dict(
+        # input_file=input_path,
+        # output_file=Path(output_file),
+        # Overlay invisible text on the original image — keeps visuals intact
+        force_ocr=False,       # skip pages that already have selectable text
+        skip_text=True,        # ← skip already-OCR'd pages instead of failing
+        deskew=True,           # straighten skewed scans automatically
+        rotate_pages=True,     # fix upside-down / sideways pages
+        optimize=1,            # light compression (0=none, 3=aggressive)
+        language="eng",        # change / extend e.g. "eng+fra+deu"
+        progress_bar=False,
+    )
+
+    if page_ranges is not None:
+        kwargs["pages"] = page_ranges   # e.g. "1-3,5,7-9"
+
+    exit_code = ocrmypdf.ocr(input_file, output_file, **kwargs)
+    return exit_code
+
+    # with open(output_file, "wb") as f_out:
+    #     writer.write(f_out)

@@ -10,6 +10,7 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 - **PDF Merging**: Merge multiple PDF files into a single PDF.
 - **PDF Rotation**: Rotate a PDF by 90, 180, or 270 degrees.
 - **PDF split**: Split a multi page PDF in multiple PDFs providing page ranges (e.g. 1-2;3-4;8).
+- **PDR OCR [WIP]**: If input PDF is made by scan of page and not text, use OCR. 
 
 ## Requirements
 
@@ -25,6 +26,13 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 
 ```bash
 pip install pypdf Pillow
+```
+
+Use uv if preferred and create a local env
+```bash
+uv venv
+source .venv/bin/activate
+uv pip install -r requirements.txt 
 ```
 
 ## Usage
@@ -59,10 +67,13 @@ python MagicPDF.py
 5. Click the "Rotate PDF" button.
 
 ### PDF Split
-2. Browse and select the input PDF file.
-3. Specify the output PDF folder.
-4. Enter the page range (e.g. 1-2;3-4;8).
-5. Click the "Split PDF" button.
+1. Browse and select the input PDF file.
+2. Specify the output PDF folder.
+3. Enter the page range (e.g. 1-2;3-4;8).
+4. Click the "Split PDF" button.
+
+### PDF OCR [WIP]
+
 
 ## License
 

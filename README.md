@@ -10,7 +10,7 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 - **PDF Merging**: Merge multiple PDF files into a single PDF.
 - **PDF Rotation**: Rotate a PDF by 90, 180, or 270 degrees.
 - **PDF split**: Split a multi page PDF in multiple PDFs providing page ranges (e.g. 1-2;3-4;8).
-- **PDR OCR [WIP]**: If input PDF is made by scan of page and not text, use OCR. 
+- **PDR OCR**: If input PDF is made by scan of page and not text, use OCR. 
 
 ## Requirements
 
@@ -18,6 +18,7 @@ This is a simple GUI application to manipulate PDF files using `tkinter`, `pypdf
 - `pypdf` library
 - `Pillow` library
 - `tkinter` library (usually included with Python installations)
+- `OCRmyPDF` library
 
 ## Installation
 
@@ -69,10 +70,14 @@ python MagicPDF.py
 ### PDF Split
 1. Browse and select the input PDF file.
 2. Specify the output PDF folder.
-3. Enter the page range (e.g. 1-2;3-4;8).
+3. Enter the page range (e.g. 1-2;3-4;8) if desired.
 4. Click the "Split PDF" button.
 
-### PDF OCR [WIP]
+### PDF OCR
+1. Browse and select the input PDF file.
+2. Specify the output PDF folder.
+3. Enter the page range (e.g. 1-2;3-4;8) if desired.
+4. Click the "Perform OCR" button.
 
 
 ## License
@@ -106,3 +111,4 @@ pip install -e .
 - [Pillow](https://pypi.org/project/Pillow/) - A library for image processing.
 - [tkinter](https://docs.python.org/3/library/tkinter.html) - The standard Python interface to the Tk GUI toolkit.
 - [PyInstaller](https://pypi.org/project/pyinstaller/) - PyInstaller bundles a Python application and all its dependencies into a single package.
+- [OCRmyPDF](https://github.com/ocrmypdf/ocrmypdf) - OCRmyPDF adds an OCR text layer to scanned PDF files, allowing them to be searched or copy-pasted.

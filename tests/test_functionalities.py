@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # from unittest.mock import patch
 from pypdf import PdfWriter, PdfReader
-from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf
+from functionalities import ocr_pdf, rotate_pdf, compress_pdf, merge_pdfs, split_pdf
 
 class TestFunctionalities(unittest.TestCase):
     """ Test cases for functionalities.py """
@@ -22,6 +22,8 @@ class TestFunctionalities(unittest.TestCase):
         self.rotated_pdf = os.path.join(path, "rotated.pdf")
         self.compressed_pdf = os.path.join(path, "compressed.pdf")
         self.compressed_pdf_2 = os.path.join(path, "compressed_2.pdf")
+        self.ocr_pdf = os.path.join(path, "ocr_test_1.pdf")
+        self.ocr_pdf_2 = os.path.join(path, "ocr_test_2.pdf")
 
         writer1 = PdfWriter(clone_from=self.test_pdf)
         with open(self.sample_pdf1, "wb") as f:
@@ -41,7 +43,8 @@ class TestFunctionalities(unittest.TestCase):
                   self.merged_pdf,
                   self.rotated_pdf,
                   self.compressed_pdf,
-                  self.compressed_pdf_2]:
+                  self.compressed_pdf_2,
+                  self.ocr_pdf_2]:
             if os.path.exists(f):
                 os.remove(f)
 
@@ -147,6 +150,30 @@ class TestFunctionalities(unittest.TestCase):
         print(f"Compressed PDF size: {os.path.getsize(self.compressed_pdf_2)} bytes")
         # Check that compressed PDF is greater than the first compressed PDF
         self.assertTrue(os.path.getsize(self.compressed_pdf_2) > os.path.getsize(self.compressed_pdf))
+
+    def test_ocr_pdf_invalid_file(self):
+        with self.assertRaises(Exception):
+            ocr_pdf("nonexistent.pdf", self.compressed_pdf, page_ranges=["1-3"])
+
+    def test_ocr_pdf(self):
+        ocr_pdf(self.ocr_pdf, self.ocr_pdf_2)
+        self.assertTrue(os.path.exists(self.ocr_pdf_2))
+        reader = PdfReader(self.ocr_pdf_2)
+        # Check if OCR text layer is added (check for /Contents or similar)
+        self.assertTrue('/Contents' in reader.pages[0])
+        reader.close()
+        reader.stream.close()
+
+    def test_ocr_pdf_out_of_bounds(self):
+        self.assertRaises(Exception, lambda:          
+            ocr_pdf(self.ocr_pdf, self.ocr_pdf_2, page_ranges=["1-3"]) #should fail gracefully since test PDF has only 1 page
+        )
+        self.assertTrue(os.path.exists(self.ocr_pdf_2))
+        reader = PdfReader(self.ocr_pdf_2)
+        # Check if OCR text layer is added (check for /Contents or similar)
+        self.assertTrue('/Contents' in reader.pages[0])
+        reader.close()
+        reader.stream.close()
 
 if __name__ == "__main__":
     unittest.main()

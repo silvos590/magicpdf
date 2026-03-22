@@ -24,3 +24,8 @@ def show_split_frame(split_frame, root):
     split_frame.pack(fill='both', expand=True)
     root.title("Magic PDF - Split")
     forget_all_frames(root, split_frame)
+
+def show_ocr_frame(ocr_frame, root):
+    ocr_frame.pack(fill='both', expand=True)
+    root.title("Magic PDF - OCR")
+    forget_all_frames(root, ocr_frame)

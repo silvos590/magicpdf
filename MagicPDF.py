@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import messagebox, Menu
 from gui_helpers import *
 from utils import browse_file, browse_files
-from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf
+from functionalities import rotate_pdf, compress_pdf, merge_pdfs, split_pdf, ocr_pdf
 
 def resource_path(relative_path):
     """ Get absolute path to resource (works for dev and PyInstaller) """
@@ -80,6 +80,24 @@ def split():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+def ocr():
+    input_file = input_ocr_entry.get()
+    output_file = output_ocr_entry.get()
+    page_ranges = None
+
+    if page_ranges_ocr_entry.get():
+        page_ranges = page_ranges_ocr_entry.get().split(";")
+
+    if not input_file or not output_file:
+        messagebox.showwarning("Input Error", "Please fill in all fields")
+        return
+
+    try:
+        ocr_pdf(input_file, output_file, page_ranges=page_ranges)
+        messagebox.showinfo("Success", f"OCR PDF saved as {output_file}")
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
 # Create the main window
 root = tk.Tk()
 root.title("Magic PDF")
@@ -100,6 +118,8 @@ file_menu.add_command(label="Merge PDFs",
                       command=lambda: show_merge_frame(merge_frame, root))
 file_menu.add_command(label="Split PDF",
                       command=lambda: show_split_frame(split_frame, root))
+file_menu.add_command(label="OCR PDF",
+                      command=lambda: show_ocr_frame(ocr_frame, root))
 file_menu.add_separator()
 file_menu.add_command(label="Exit", command=root.quit)
 # Add Credits
@@ -114,6 +134,7 @@ compress_frame = tk.Frame(root)
 rotate_frame = tk.Frame(root)
 merge_frame = tk.Frame(root)
 split_frame = tk.Frame(root)
+ocr_frame = tk.Frame(root)
 
 # Compression Frame Components
 tk.Label(compress_frame, text="Input PDF File:").grid(row=0, column=0, padx=10, pady=5)
@@ -183,6 +204,24 @@ page_ranges_entry.grid(row=2, column=1, padx=10, pady=5)
 
 split_button = tk.Button(split_frame, text="Split PDF", command=split)
 split_button.grid(row=3, columnspan=3, pady=10)
+
+# OCR Frame Components
+tk.Label(ocr_frame, text="Input PDF File:").grid(row=0, column=0, padx=10, pady=5)
+input_ocr_entry = tk.Entry(ocr_frame, width=50)
+input_ocr_entry.grid(row=0, column=1, padx=10, pady=5)
+browse_ocr_button = tk.Button(ocr_frame, text="Browse", command=lambda: browse_file(input_ocr_entry))
+browse_ocr_button.grid(row=0, column=2, padx=10, pady=5)
+
+tk.Label(ocr_frame, text="Output PDF File:").grid(row=1, column=0, padx=10, pady=5)
+output_ocr_entry = tk.Entry(ocr_frame, width=50)
+output_ocr_entry.grid(row=1, column=1, padx=10, pady=5)
+
+tk.Label(ocr_frame, text="Page Ranges (e.g. 1-2;3-4;8):").grid(row=2, column=0, padx=10, pady=5)
+page_ranges_ocr_entry = tk.Entry(ocr_frame, width=50)
+page_ranges_ocr_entry.grid(row=2, column=1, padx=10, pady=5)
+
+ocr_button = tk.Button(ocr_frame, text="Perform OCR", command=ocr)
+ocr_button.grid(row=3, columnspan=3, pady=10)
 
 # Show compress frame by default
 show_compress_frame(compress_frame, root)

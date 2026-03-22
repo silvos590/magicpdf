@@ -168,12 +168,7 @@ class TestFunctionalities(unittest.TestCase):
         self.assertRaises(Exception, lambda:          
             ocr_pdf(self.ocr_pdf, self.ocr_pdf_2, page_ranges=["1-3"]) #should fail gracefully since test PDF has only 1 page
         )
-        self.assertTrue(os.path.exists(self.ocr_pdf_2))
-        reader = PdfReader(self.ocr_pdf_2)
-        # Check if OCR text layer is added (check for /Contents or similar)
-        self.assertTrue('/Contents' in reader.pages[0])
-        reader.close()
-        reader.stream.close()
+        self.assertFalse(os.path.exists(self.ocr_pdf_2))
 
 if __name__ == "__main__":
     unittest.main()

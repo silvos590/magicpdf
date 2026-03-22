@@ -7,7 +7,7 @@ name = "magicpdf"
 version = "0.1.1"
 description = "A simple CLI to manipulate PDF files"
 authors = [{ name = "Aldo Mollica" }]
-dependencies = ["pypdf", "Pillow", "ocrmypdf"]
+dependencies = ["pypdf", "Pillow", "ocrmypdf", "tesseract-ocr"]
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -1,6 +1,7 @@
 pypdf
 Pillow
-#tesseract-ocr
+tesseract-ocr
 #For non-English documents, extend the language parameter: "eng+fra", "deu", "ita", etc. (requires the corresponding tesseract-ocr-* system package).
+ghostscript
 ocrmypdf
 pytest

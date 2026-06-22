@@ -1,7 +1,7 @@
-pypdf
-Pillow
+pypdf>=6.12.2
+Pillow>=12.2.0
 #tesseract-ocr
 #For non-English documents, extend the language parameter: "eng+fra", "deu", "ita", etc. (requires the corresponding tesseract-ocr-* system package).
 #ghostscript
-ocrmypdf
+ocrmypdf>=17.4.2
 pytest

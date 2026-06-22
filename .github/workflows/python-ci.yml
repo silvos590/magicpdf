@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   build:
@@ -20,11 +20,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0   # needed to fetch tags
-
-      - name: Set up Git
-        uses: fregante/setup-git-user@v2.0.2
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -42,8 +37,7 @@ jobs:
       - name: Lint with flake8
         run: |
           # Stop the build if there are Python syntax errors or undefined names
-          # flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          flake8 . --count --select=E9,F63,F7 --show-source --statistics
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           # Exit-zero treats all errors as warnings (useful for TODO stage)
           flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
@@ -52,9 +46,34 @@ jobs:
           cd tests
           python -m unittest discover
 
+      # - name: Run tests with pytest and coverage
+      #   run: |
+      #     pytest --cov=. --cov-report=term-missing
+
+      # - name: Upload coverage report artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: coverage-report
+      #     path: .coverage
+
+  tag:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # only this job can push tags
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # needed to fetch tags
+
+      - name: Set up Git
+        uses: fregante/setup-git-user@v2.0.2
+
       - name: Get latest tag
         id: get_tag
-        if: matrix.python-version == '3.12' && github.event_name == 'push'
         run: |
           # Get latest tag or default to v1.0.0
           LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
@@ -73,18 +92,7 @@ jobs:
           echo "new_tag=$NEW_TAG" >> $GITHUB_OUTPUT
 
       - name: Create and push tag
-        if: matrix.python-version == '3.12' && github.event_name == 'push'
         run: |
           VERSION="${{ steps.bump.outputs.new_tag }}"
           git tag -a "$VERSION" -m "Release $VERSION"
           git push origin "$VERSION"
-
-      # - name: Run tests with pytest and coverage
-      #   run: |
-      #     pytest --cov=. --cov-report=term-missing
-
-      # - name: Upload coverage report artifact
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: coverage-report
-      #     path: .coverage
